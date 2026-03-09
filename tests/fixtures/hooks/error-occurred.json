@@ -1,0 +1,8 @@
+{
+  "timestamp": 1704614800000,
+  "cwd": ".",
+  "error": {
+    "name": "TimeoutError",
+    "message": "Network timeout while checking optional remote docs"
+  }
+}

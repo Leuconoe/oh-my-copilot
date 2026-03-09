@@ -1,0 +1,45 @@
+name: verify
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    name: verify (${{ matrix.os }}, node-${{ matrix.node }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+        node:
+          - 24
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Validate manifest JSON
+        run: node -e "JSON.parse(require('fs').readFileSync('plugin.json','utf8')); JSON.parse(require('fs').readFileSync('hooks.json','utf8')); console.log('plugin.json and hooks.json parse successfully.')"
+
+      - name: Check script syntax
+        run: |
+          node --check "scripts/lib/highlights-runtime.cjs"
+          node --check "scripts/flush-highlights.cjs"
+          node --check "tests/verify-hook-fixtures.cjs"
+          node --check "tests/verify-flush-highlights.cjs"
+
+      - name: Run verification tests
+        run: |
+          node tests/verify-hook-fixtures.cjs
+          node tests/verify-flush-highlights.cjs
