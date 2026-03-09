@@ -1,0 +1,5 @@
+{
+  "timestamp": 1704614500000,
+  "cwd": ".",
+  "prompt": "Summarize this session and do not leak GITHUB_TOKEN=ghp_1234567890ABCDEFGHIJKLMNOPQRSTUV"
+}

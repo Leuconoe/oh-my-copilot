@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "node ./scripts/session-start.cjs",
+        "powershell": "node ./scripts/session-start.cjs",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ],
+    "userPromptSubmitted": [
+      {
+        "type": "command",
+        "bash": "node ./scripts/prompt-log.cjs",
+        "powershell": "node ./scripts/prompt-log.cjs",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ],
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "node ./scripts/pre-tool-guard.cjs",
+        "powershell": "node ./scripts/pre-tool-guard.cjs",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "node ./scripts/post-tool-capture.cjs",
+        "powershell": "node ./scripts/post-tool-capture.cjs",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ],
+    "errorOccurred": [
+      {
+        "type": "command",
+        "bash": "node ./scripts/error-occurred.cjs",
+        "powershell": "node ./scripts/error-occurred.cjs",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "node ./scripts/session-end.cjs",
+        "powershell": "node ./scripts/session-end.cjs",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}
