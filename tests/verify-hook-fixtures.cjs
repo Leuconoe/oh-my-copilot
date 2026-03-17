@@ -80,7 +80,7 @@ assert.equal(result.status, 0, result.stderr)
 
 const sessionJson = readJson(path.join(sessionDir, "session.json"))
 assert.ok(sessionJson.ended_at, "expected ended_at to be set")
-assert.equal(sessionJson.plugin_version, "0.1.0")
+assert.equal(sessionJson.plugin_version, "0.2.0")
 assert.equal(sessionJson.prompt_count, 1)
 assert.equal(sessionJson.tool_count, 1)
 assert.equal(sessionJson.error_count, 1)

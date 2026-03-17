@@ -13,10 +13,11 @@
 ## Quick Start
 
 ```bash
-copilot plugin install https://github.com/Leuconoe/oh-my-copilot.git
+copilot plugin install Leuconoe/oh-my-copilot
 copilot plugin list
 copilot -p "/skills list" --allow-all-tools
 node tests/verify-hook-fixtures.cjs
+node tests/verify-smoke-test-models-script.cjs
 ```
 
 ## What it does
@@ -60,7 +61,7 @@ These files are designed for recap and verification workflows, not for committin
 Install directly from the repository URL:
 
 ```bash
-copilot plugin install https://github.com/Leuconoe/oh-my-copilot.git
+copilot plugin install Leuconoe/oh-my-copilot
 ```
 
 Then verify:
@@ -70,6 +71,12 @@ copilot plugin list
 copilot -p "/skills list" --allow-all-tools
 ```
 
+For local development on Copilot CLI `1.0.x`, you can load the plugin without reinstalling:
+
+```bash
+copilot --plugin-dir . -p "/skills list" --allow-all-tools
+```
+
 ## Verification
 
 Validate local changes with:
@@ -77,6 +84,7 @@ Validate local changes with:
 ```bash
 node tests/verify-hook-fixtures.cjs
 node tests/verify-flush-highlights.cjs
+node tests/verify-smoke-test-models-script.cjs
 ```
 
 Useful additional checks:
@@ -84,8 +92,10 @@ Useful additional checks:
 ```bash
 node --check "scripts/lib/highlights-runtime.cjs"
 node --check "scripts/flush-highlights.cjs"
+node --check "scripts/smoke-test-models.cjs"
 node --check "tests/verify-hook-fixtures.cjs"
 node --check "tests/verify-flush-highlights.cjs"
+node --check "tests/verify-smoke-test-models-script.cjs"
 ```
 
 For live smoke tests, run a non-interactive Copilot prompt and inspect the newest `.copilot-highlights/sessions/` directory.
@@ -116,6 +126,7 @@ This project borrows ideas from `oh-my-opencode` and `oh-my-codex`, but it is in
 - Hook-verified denial handling through Copilot CLI `preToolUse`, including real `denied` event capture in session artifacts.
 - Prefixed `copilot-highlights-*` agents and skills designed to avoid collisions with project-level or user-level customizations.
 - A dedicated flush workflow for resetting local Highlights artifacts with `node scripts/flush-highlights.cjs --dry-run` and `node scripts/flush-highlights.cjs --yes`.
+- A sequential smoke-test utility for current free models with `node scripts/smoke-test-models.cjs`.
 
 ## Simple Copilot Test Cycle
 
@@ -130,22 +141,23 @@ Use this short loop when testing from Copilot CLI:
 Recommended commands:
 
 ```bash
-copilot plugin install https://github.com/Leuconoe/oh-my-copilot.git
+copilot plugin install Leuconoe/oh-my-copilot
 copilot plugin list
-copilot -p "/skills list" --allow-all-tools
-copilot -p "Use the bash tool once to run: node --version. Then reply with exactly: live-success-check" --allow-all-tools
-copilot -p "Use the powershell tool once to run: sudo echo hi. If the tool call is denied, reply with exactly: live-denial-confirmed. If it executes, reply with exactly: live-denial-missed" --allow-all-tools
+node scripts/smoke-test-models.cjs --mode plugin-dir --model gpt-4.1 --model gpt-5-mini
 ```
 
 Expected results:
 
 - `copilot plugin list` shows `oh-my-copilot`.
 - `/skills list` shows the `copilot-highlights-*` skills.
-- The success flow creates a session with `session.json`, `prompts.jsonl`, `tools.jsonl`, `errors.jsonl`, and `highlights.md`.
-- The denial flow records a `denied` tool event and adds a `Failures Or Denials` section to `highlights.md`.
+- The smoke-test script validates both a successful `node --version` flow and a denied `sudo echo hi` flow for each selected model.
 - `.copilot-highlights/active-sessions.json` returns to `{}` after the run.
 
-If you are developing locally and need to test unpushed changes, reinstall from the repository root with `copilot plugin install ./`.
+If you are developing locally and need to test unpushed changes, prefer `copilot --plugin-dir .` for quick checks and reinstall from the repository root with `copilot plugin install ./` when you need to validate installed-plugin behavior.
+
+Important limitation:
+
+- Do not run multiple non-interactive Copilot smoke tests in parallel from the same `cwd`. Current documented hook payloads do not expose a stable session ID, so same-directory parallel runs can mix Highlights artifacts.
 
 Optional cleanup:
 
