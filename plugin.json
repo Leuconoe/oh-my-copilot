@@ -1,7 +1,7 @@
 {
   "name": "oh-my-copilot",
   "description": "GitHub Copilot CLI plugin with session Highlights, recap skills, and focused agents for structured development workflows.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "oh-my-copilot contributors"
   },
