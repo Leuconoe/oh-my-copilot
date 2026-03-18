@@ -1,6 +1,6 @@
 ---
 name: copilot-highlights-planner
-description: Plan and scope GitHub Copilot CLI plugin work for session Highlights, recap workflows, hook behavior, and agent/skill architecture. Use when planning or decomposing implementation work.
+description: 'Plan and scope GitHub Copilot CLI plugin work for session Highlights, recap workflows, hook behavior, and agent/skill architecture. Use when planning or decomposing implementation work.'
 tools: ["read", "search", "edit"]
 user-invocable: true
 disable-model-invocation: false

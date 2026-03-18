@@ -5,10 +5,15 @@
 [![Last Commit](https://img.shields.io/github/last-commit/Leuconoe/oh-my-copilot)](https://github.com/Leuconoe/oh-my-copilot/commits/main)
 
 - Korean: [README.ko.md](README.ko.md)
+- Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 - Quick links: [Quick Start](#quick-start), [Comparison](#comparison-with-reference-repositories), [Simple Copilot Test Cycle](#simple-copilot-test-cycle), [Verification](#verification)
 
+- Docs: [Agents](docs/README.agents.md), [Skills](docs/README.skills.md), [Hooks](docs/README.hooks.md), [Plugins](docs/README.plugins.md)
+
 `oh-my-copilot` is a GitHub Copilot CLI plugin that captures session Highlights, ships focused custom agents and skills, and records structured hook artifacts under `.copilot-highlights/`.
+
+The plugin's custom agents intentionally inherit the user's selected Copilot model. The free models `gpt-4.1` and `gpt-5-mini` are used in this repository only for smoke testing.
 
 ## Quick Start
 
@@ -17,6 +22,7 @@ copilot plugin install Leuconoe/oh-my-copilot
 copilot plugin list
 copilot -p "/skills list" --allow-all-tools
 node tests/verify-hook-fixtures.cjs
+node tests/verify-resource-metadata.cjs
 node tests/verify-smoke-test-models-script.cjs
 ```
 
@@ -84,6 +90,7 @@ Validate local changes with:
 ```bash
 node tests/verify-hook-fixtures.cjs
 node tests/verify-flush-highlights.cjs
+node tests/verify-resource-metadata.cjs
 node tests/verify-smoke-test-models-script.cjs
 ```
 
@@ -95,6 +102,7 @@ node --check "scripts/flush-highlights.cjs"
 node --check "scripts/smoke-test-models.cjs"
 node --check "tests/verify-hook-fixtures.cjs"
 node --check "tests/verify-flush-highlights.cjs"
+node --check "tests/verify-resource-metadata.cjs"
 node --check "tests/verify-smoke-test-models-script.cjs"
 ```
 

@@ -1,6 +1,6 @@
 ---
 name: copilot-highlights-explorer
-description: Explore the current repository structure, plugin files, fixtures, and reference material for the oh-my-copilot GitHub Copilot CLI plugin. Use for discovery and repo mapping.
+description: 'Explore the current repository structure, plugin files, fixtures, and reference material for the oh-my-copilot GitHub Copilot CLI plugin. Use for discovery and repo mapping.'
 tools: ["read", "search"]
 user-invocable: true
 disable-model-invocation: false

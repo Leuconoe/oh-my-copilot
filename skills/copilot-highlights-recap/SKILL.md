@@ -1,6 +1,6 @@
 ---
 name: copilot-highlights-recap
-description: Summarize the latest `.copilot-highlights` session artifacts into concise human-readable Highlights. Use when asked for a recap, session summary, or highlights report.
+description: 'Summarize the latest `.copilot-highlights` session artifacts into concise human-readable Highlights. Use when asked for a recap, session summary, or highlights report.'
 ---
 
 Use this skill when the task is to summarize recent plugin-captured session activity.

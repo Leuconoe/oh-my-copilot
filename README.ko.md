@@ -5,18 +5,24 @@
 [![Last Commit](https://img.shields.io/github/last-commit/Leuconoe/oh-my-copilot)](https://github.com/Leuconoe/oh-my-copilot/commits/main)
 
 - English: [README.md](README.md)
+- Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 - 빠른 링크: [빠른 시작](#빠른-시작), [비교](#레퍼런스-저장소와의-비교), [간단한 Copilot 테스트 사이클](#간단한-copilot-테스트-사이클), [검증](#검증)
 
+- 문서: [Agents](docs/README.agents.md), [Skills](docs/README.skills.md), [Hooks](docs/README.hooks.md), [Plugins](docs/README.plugins.md)
+
 `oh-my-copilot`은 세션 Highlights를 수집하고, 목적이 분명한 커스텀 에이전트와 스킬을 제공하며, 구조화된 훅 아티팩트를 `.copilot-highlights/` 아래에 기록하는 GitHub Copilot CLI 플러그인입니다.
+
+이 플러그인의 커스텀 에이전트는 특정 모델에 고정되지 않고, 사용자가 선택한 Copilot 모델을 상속합니다. 이 저장소에서 `gpt-4.1`과 `gpt-5-mini`는 스모크 테스트 용도로만 사용합니다.
 
 ## 빠른 시작
 
 ```bash
-copilot plugin install https://github.com/Leuconoe/oh-my-copilot.git
+copilot plugin install Leuconoe/oh-my-copilot
 copilot plugin list
 copilot -p "/skills list" --allow-all-tools
 node tests/verify-hook-fixtures.cjs
+node tests/verify-resource-metadata.cjs
 node tests/verify-smoke-test-models-script.cjs
 ```
 
@@ -84,6 +90,7 @@ copilot --plugin-dir . -p "/skills list" --allow-all-tools
 ```bash
 node tests/verify-hook-fixtures.cjs
 node tests/verify-flush-highlights.cjs
+node tests/verify-resource-metadata.cjs
 node tests/verify-smoke-test-models-script.cjs
 ```
 
@@ -95,6 +102,7 @@ node --check "scripts/flush-highlights.cjs"
 node --check "scripts/smoke-test-models.cjs"
 node --check "tests/verify-hook-fixtures.cjs"
 node --check "tests/verify-flush-highlights.cjs"
+node --check "tests/verify-resource-metadata.cjs"
 node --check "tests/verify-smoke-test-models-script.cjs"
 ```
 

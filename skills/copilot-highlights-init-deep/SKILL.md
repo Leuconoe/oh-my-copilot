@@ -1,6 +1,6 @@
 ---
 name: copilot-highlights-init-deep
-description: Initialize a project for this plugin's workflow by creating instruction surfaces, hook-safe runtime directories, and starter conventions for Highlights-oriented development.
+description: 'Initialize a project for this plugin''s workflow by creating instruction surfaces, hook-safe runtime directories, and starter conventions for Highlights-oriented development.'
 ---
 
 Use this skill when asked to bootstrap a project for `oh-my-copilot` usage.
