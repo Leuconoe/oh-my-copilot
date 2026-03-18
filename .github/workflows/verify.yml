@@ -39,10 +39,12 @@ jobs:
           node --check "scripts/smoke-test-models.cjs"
           node --check "tests/verify-hook-fixtures.cjs"
           node --check "tests/verify-flush-highlights.cjs"
+          node --check "tests/verify-resource-metadata.cjs"
           node --check "tests/verify-smoke-test-models-script.cjs"
 
       - name: Run verification tests
         run: |
           node tests/verify-hook-fixtures.cjs
           node tests/verify-flush-highlights.cjs
+          node tests/verify-resource-metadata.cjs
           node tests/verify-smoke-test-models-script.cjs

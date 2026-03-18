@@ -1,6 +1,6 @@
 ---
 name: copilot-highlights-implementation-plan
-description: Turn a Highlights feature request into a PDCA-style implementation plan for the oh-my-copilot plugin. Use when scoping new plugin work before coding.
+description: 'Turn a Highlights feature request into a PDCA-style implementation plan for the oh-my-copilot plugin. Use when scoping new plugin work before coding.'
 ---
 
 Use this skill to plan plugin work in a grounded way.

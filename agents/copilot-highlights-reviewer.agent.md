@@ -1,6 +1,6 @@
 ---
 name: copilot-highlights-reviewer
-description: Review oh-my-copilot plugin changes for correctness, safety, verification quality, and honest platform claims. Use after implementation or before release.
+description: 'Review oh-my-copilot plugin changes for correctness, safety, verification quality, and honest platform claims. Use after implementation or before release.'
 tools: ["read", "search"]
 user-invocable: true
 disable-model-invocation: false

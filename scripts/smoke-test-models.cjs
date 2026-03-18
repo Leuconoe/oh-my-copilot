@@ -105,26 +105,42 @@ function assertIncludes(value, needle, label) {
   }
 }
 
-function validateSuccessSession(sessionDir) {
+function hasSuccessCapture(sessionDir) {
   const tools = readJsonl(path.join(sessionDir, "tools.jsonl"))
+  return tools.some((event) => event.result_type === "success" && event.summary.includes("node --version"))
+}
+
+function hasDeniedCapture(sessionDir) {
+  const tools = readJsonl(path.join(sessionDir, "tools.jsonl"))
+  return tools.some((event) => event.result_type === "denied" && event.summary.includes("sudo echo hi"))
+}
+
+function validateSuccessSession(sessionDir) {
   const highlightsPath = path.join(sessionDir, "highlights.md")
   const highlights = fs.existsSync(highlightsPath) ? fs.readFileSync(highlightsPath, "utf8") : ""
-  const hasSuccess = tools.some((event) => event.result_type === "success" && event.summary.includes("node --version"))
-  if (!hasSuccess) {
+  if (!hasSuccessCapture(sessionDir)) {
     throw new Error(`Success session did not capture node --version: ${sessionDir}`)
   }
   assertIncludes(highlights, "# Session Highlights", "success highlights")
 }
 
 function validateDeniedSession(sessionDir) {
-  const tools = readJsonl(path.join(sessionDir, "tools.jsonl"))
   const highlightsPath = path.join(sessionDir, "highlights.md")
   const highlights = fs.existsSync(highlightsPath) ? fs.readFileSync(highlightsPath, "utf8") : ""
-  const hasDenied = tools.some((event) => event.result_type === "denied" && event.summary.includes("sudo echo hi"))
-  if (!hasDenied) {
+  if (!hasDeniedCapture(sessionDir)) {
     throw new Error(`Denied session did not capture sudo denial: ${sessionDir}`)
   }
   assertIncludes(highlights, "Failures Or Denials", "denied highlights")
+}
+
+function pickSessionDir(stateRoot, sessionNames, matcher, label) {
+  for (const sessionName of sessionNames) {
+    const sessionDir = path.join(stateRoot, "sessions", sessionName)
+    if (matcher(sessionDir)) {
+      return sessionDir
+    }
+  }
+  throw new Error(`No matching ${label} session found in: ${sessionNames.join(", ")}`)
 }
 
 function main() {
@@ -137,8 +153,9 @@ function main() {
   }
   for (const model of options.models) {
     const base = buildBaseArgs(options, model).join(" ")
-    planned.push(`copilot ${base} -p "/skills list"`)
-    planned.push(`copilot ${base} -p "Use the bash tool once to run: node --version. Then reply with exactly: smoke-success-${model}"`)
+    planned.push(`copilot ${base} -p "List every available plugin skill from oh-my-copilot by exact name only."`)
+    planned.push(`copilot ${base} -p "List every available plugin agent from oh-my-copilot by exact name only."`)
+    planned.push(`copilot ${base} -p "Use the powershell tool once to run: node --version. Then reply with exactly: smoke-success-${model}"`)
     planned.push(`copilot ${base} -p "Use the powershell tool once to run: sudo echo hi. If the tool call is denied, reply with exactly: smoke-denial-${model}. If it executes, reply with exactly: smoke-denial-missed-${model}"`)
   }
 
@@ -163,13 +180,21 @@ function main() {
   for (const model of options.models) {
     const baseArgs = buildBaseArgs(options, model)
 
-    const skillsResult = runCommand("copilot", [...baseArgs, "-p", "/skills list"], options.repoRoot)
-    assertOk(skillsResult, `skills list (${model})`)
-    assertIncludes(skillsResult.stdout, "copilot-highlights-verification-loop", `skills list (${model})`)
+    const skillsPrompt = "List every available plugin skill from oh-my-copilot by exact name only."
+    const skillsResult = runCommand("copilot", [...baseArgs, "-p", skillsPrompt], options.repoRoot)
+    assertOk(skillsResult, `skills discovery (${model})`)
+    assertIncludes(skillsResult.stdout, "copilot-highlights-verification-loop", `skills discovery (${model})`)
+    assertIncludes(skillsResult.stdout, "copilot-highlights-flush", `skills discovery (${model})`)
+
+    const agentsPrompt = "List every available plugin agent from oh-my-copilot by exact name only."
+    const agentsResult = runCommand("copilot", [...baseArgs, "-p", agentsPrompt], options.repoRoot)
+    assertOk(agentsResult, `agent discovery (${model})`)
+    assertIncludes(agentsResult.stdout, "copilot-highlights-planner", `agent discovery (${model})`)
+    assertIncludes(agentsResult.stdout, "copilot-highlights-builder", `agent discovery (${model})`)
 
     const beforeSuccess = listSessionNames(stateRoot)
     const successMarker = `smoke-success-${model}`
-    const successPrompt = `Use the bash tool once to run: node --version. Then reply with exactly: ${successMarker}`
+    const successPrompt = `Use the powershell tool once to run: node --version. Then reply with exactly: ${successMarker}`
     const successResult = runCommand("copilot", [...baseArgs, "-p", successPrompt], options.repoRoot)
     assertOk(successResult, `success smoke (${model})`)
     assertIncludes(successResult.stdout, successMarker, `success smoke (${model})`)
@@ -178,7 +203,7 @@ function main() {
     if (successSessions.length < 1) {
       throw new Error(`No new success session detected for ${model}`)
     }
-    validateSuccessSession(path.join(stateRoot, "sessions", successSessions.at(-1)))
+    validateSuccessSession(pickSessionDir(stateRoot, successSessions, hasSuccessCapture, `success (${model})`))
 
     const beforeDenied = listSessionNames(stateRoot)
     const deniedMarker = `smoke-denial-${model}`
@@ -192,7 +217,7 @@ function main() {
     if (deniedSessions.length < 1) {
       throw new Error(`No new denied session detected for ${model}`)
     }
-    validateDeniedSession(path.join(stateRoot, "sessions", deniedSessions.at(-1)))
+    validateDeniedSession(pickSessionDir(stateRoot, deniedSessions, hasDeniedCapture, `denied (${model})`))
   }
 
   const activeSessionsPath = path.join(stateRoot, "active-sessions.json")

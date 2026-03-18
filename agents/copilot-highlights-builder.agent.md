@@ -1,6 +1,6 @@
 ---
 name: copilot-highlights-builder
-description: Implement and iterate on the oh-my-copilot GitHub Copilot CLI plugin, including hook scripts, agents, skills, manifests, and tests. Use for concrete code changes.
+description: 'Implement and iterate on the oh-my-copilot GitHub Copilot CLI plugin, including hook scripts, agents, skills, manifests, and tests. Use for concrete code changes.'
 tools: ["read", "search", "edit", "execute"]
 user-invocable: true
 disable-model-invocation: false

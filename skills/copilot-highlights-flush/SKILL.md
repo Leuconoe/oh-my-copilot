@@ -1,6 +1,6 @@
 ---
 name: copilot-highlights-flush
-description: Safely reset local `.copilot-highlights` artifacts after testing or before sharing a workspace. Use when asked to flush, clean, or reset captured Highlights state.
+description: 'Safely reset local `.copilot-highlights` artifacts after testing or before sharing a workspace. Use when asked to flush, clean, or reset captured Highlights state.'
 ---
 
 Use this skill when local Highlights artifacts need cleanup.

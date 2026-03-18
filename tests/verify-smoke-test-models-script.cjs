@@ -18,6 +18,7 @@ assert.equal(result.status, 0, result.stderr)
 assert.match(result.stdout, /mode=plugin-dir/)
 assert.match(result.stdout, /models=gpt-4.1,gpt-5-mini/)
 assert.match(result.stdout, /--plugin-dir/)
+assert.match(result.stdout, /List every available plugin agent from oh-my-copilot by exact name only/)
 assert.match(result.stdout, /smoke-success-gpt-4.1/)
 assert.match(result.stdout, /smoke-denial-gpt-5-mini/)
 

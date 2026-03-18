@@ -1,6 +1,6 @@
 ---
 name: copilot-highlights-verification-loop
-description: Verify oh-my-copilot plugin changes by running fixture tests, JSON validation, and local Copilot plugin install checks. Use after changing manifests, hooks, agents, or skills.
+description: 'Verify oh-my-copilot plugin changes by running fixture tests, JSON validation, and local Copilot plugin install checks. Use after changing manifests, hooks, agents, or skills.'
 ---
 
 Use this skill after meaningful plugin changes.
